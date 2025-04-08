@@ -1,0 +1,152 @@
+{
+    "app": {
+      "title": "מערכת סוכני AI של פלאפון",
+      "footer": "© 2023 פלאפון. כל הזכויות שמורות."
+    },
+    "nav": {
+      "dashboard": "לוח בקרה",
+      "billing": "סוכן חיובים",
+      "international": "שיחות בינלאומיות",
+      "supervisor": "מפקח",
+      "logout": "התנתקות",
+      "login": "התחברות"
+    },
+    "login": {
+      "title": "התחברות למערכת AI של פלאפון",
+      "username": "שם משתמש",
+      "password": "סיסמה",
+      "submit": "התחבר",
+      "error": "ההתחברות נכשלה. אנא בדוק את הפרטים שלך."
+    },
+    "dashboard": {
+      "title": "לוח בקרה",
+      "welcome": "ברוך הבא, {name}",
+      "activeSession": "שיחה פעילה",
+      "noActiveSession": "אין שיחה פעילה",
+      "startSession": "התחל שיחה חדשה",
+      "customerSearch": "חיפוש לקוח",
+      "recentSessions": "שיחות אחרונות",
+      "sessionHistory": "היסטוריית שיחות"
+    },
+    "session": {
+      "create": "צור שיחה",
+      "customerId": "מספר לקוח",
+      "start": "התחל שיחה",
+      "end": "סיים שיחה",
+      "status": "סטטוס",
+      "active": "פעילה",
+      "ended": "הסתיימה",
+      "duration": "משך זמן",
+      "startTime": "התחילה בשעה",
+      "endTime": "הסתיימה בשעה"
+    },
+    "customer": {
+      "id": "מספר לקוח",
+      "name": "שם",
+      "plan": "חבילה נוכחית",
+      "contractEnd": "תאריך סיום חוזה",
+      "monthlyCharge": "חיוב חודשי",
+      "paymentStatus": "סטטוס תשלום",
+      "profile": "פרופיל לקוח",
+      "search": "חיפוש לקוחות",
+      "billing": "מידע חיובים",
+      "usage": "מידע שימוש"
+    },
+    "billing": {
+      "title": "סוכן חיובים",
+      "inquiry": "בירור חיובים",
+      "discrepancy": "אי התאמה בחיובים",
+      "refund": "בקשת החזר",
+      "planChange": "שינוי חבילה",
+      "history": "היסטוריית חיובים",
+      "amount": "סכום",
+      "description": "תיאור",
+      "date": "תאריך",
+      "status": "סטטוס",
+      "submit": "שלח בקשה",
+      "lastBill": "חשבון אחרון",
+      "paymentDue": "לתשלום עד",
+      "reportIssue": "דווח על בעיה",
+      "availablePlans": "חבילות זמינות",
+      "currentPlan": "חבילה נוכחית",
+      "changePlan": "שנה חבילה",
+      "inquiryTypes": {
+        "general": "בירור כללי",
+        "lastBill": "בירור לגבי החשבון האחרון",
+        "paymentMethod": "אמצעי תשלום",
+        "charges": "חיובים בלתי צפויים"
+      },
+      "refundTypes": {
+        "overcharge": "חיוב יתר",
+        "service": "שירות שלא סופק",
+        "duplicate": "חיוב כפול",
+        "other": "אחר"
+      }
+    },
+    "international": {
+      "title": "סוכן שיחות בינלאומיות",
+      "inquiry": "בירור שימוש בינלאומי",
+      "discrepancy": "אי התאמה בחיובים בינלאומיים",
+      "roaming": "בעיית נדידה",
+      "packages": "חבילות בינלאומיות",
+      "usage": "שימוש בינלאומי",
+      "country": "מדינה",
+      "minutes": "דקות",
+      "data": "נתונים (MB)",
+      "sms": "SMS",
+      "cost": "עלות",
+      "submit": "שלח בקשה",
+      "activatePackage": "הפעל חבילה",
+      "deactivatePackage": "בטל חבילה",
+      "packageDetails": "פרטי חבילה",
+      "roamingTypes": {
+        "notWorking": "נדידה לא עובדת",
+        "unexpectedCharges": "חיובי נדידה בלתי צפויים",
+        "activate": "הפעל נדידה",
+        "deactivate": "בטל נדידה"
+      }
+    },
+    "supervisor": {
+      "title": "לוח בקרת מפקח",
+      "activeRequests": "בקשות פעילות",
+      "escalations": "הסלמות",
+      "agentPerformance": "ביצועי סוכנים",
+      "metrics": "מדדים",
+      "logs": "יומני מערכת",
+      "pendingApprovals": "אישורים ממתינים",
+      "requestDetails": "פרטי בקשה",
+      "approve": "אשר",
+      "reject": "דחה",
+      "reassign": "הקצה מחדש",
+      "escalateTo": "העבר ל",
+      "resolution": "פתרון"
+    },
+    "errors": {
+      "general": "משהו השתבש",
+      "session": "שגיאת שיחה",
+      "api": "שגיאת API",
+      "connection": "שגיאת חיבור",
+      "notFound": "לא נמצא",
+      "unauthorized": "גישה לא מורשית",
+      "retry": "נסה שוב"
+    },
+    "common": {
+      "loading": "טוען...",
+      "save": "שמור",
+      "cancel": "ביטול",
+      "close": "סגור",
+      "edit": "ערוך",
+      "delete": "מחק",
+      "search": "חפש",
+      "filter": "סנן",
+      "yes": "כן",
+      "no": "לא",
+      "back": "חזור",
+      "next": "הבא",
+      "details": "פרטים",
+      "success": "הצלחה",
+      "error": "שגיאה",
+      "warning": "אזהרה",
+      "info": "מידע"
+    }
+  }

@@ -1,0 +1,195 @@
+
+services:
+  # Database
+  postgres:
+    image: postgres:14
+    container_name: pelephone-postgres
+    environment:
+      POSTGRES_USER: pelephone
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+      POSTGRES_DB: pelephone_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - pelephone-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pelephone"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for caching and session management
+  redis:
+    image: redis:6-alpine
+    container_name: pelephone-redis
+    command: redis-server --requirepass ${REDIS_PASSWORD:-password}
+    ports:
+      - "6379:6379"
+    networks:
+      - pelephone-network
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # RabbitMQ for message queue
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: pelephone-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-pelephone}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-password}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - pelephone-network
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Keycloak for SSO
+  keycloak:
+    image: quay.io/keycloak/keycloak:19.0.3
+    container_name: pelephone-keycloak
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD:-password}
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/pelephone_db
+      KC_DB_USERNAME: pelephone
+      KC_DB_PASSWORD: ${DB_PASSWORD:-password}
+    command: start-dev
+    ports:
+      - "8080:8080"
+    networks:
+      - pelephone-network
+    depends_on:
+      - postgres
+    
+  # ELK Stack for monitoring and logs
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0
+    container_name: pelephone-elasticsearch
+    environment:
+      - "discovery.type=single-node"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+    networks:
+      - pelephone-network
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+      
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.0
+    container_name: pelephone-kibana
+    ports:
+      - "5601:5601"
+    networks:
+      - pelephone-network
+    depends_on:
+      - elasticsearch
+      
+  # Frontend (to be built)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: pelephone-frontend
+    ports:
+      - "80:80"
+    networks:
+      - pelephone-network
+    depends_on:
+      - api
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      
+  # API (to be built)
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: pelephone-api
+    ports:
+      - "8000:8000"
+    networks:
+      - pelephone-network
+    depends_on:
+      - postgres
+      - redis
+      - rabbitmq
+    volumes:
+      - ./api:/app
+    environment:
+      - DATABASE_URL=postgresql://pelephone:${DB_PASSWORD:-password}@postgres:5432/pelephone_db
+      - REDIS_URL=redis://:${REDIS_PASSWORD:-password}@redis:6379/0
+      - RABBITMQ_URL=amqp://:@rabbitmq:5672/
+
+  # Billing Agent (to be built)
+  billing-agent:
+    build:
+      context: ./agents/billing
+      dockerfile: Dockerfile
+    container_name: pelephone-billing-agent
+    networks:
+      - pelephone-network
+    depends_on:
+      - api
+      - redis
+      - rabbitmq
+    volumes:
+      - ./agents/billing:/app
+
+  # International Calls Agent (to be built)
+  international-agent:
+    build:
+      context: ./agents/international
+      dockerfile: Dockerfile
+    container_name: pelephone-international-agent
+    networks:
+      - pelephone-network
+    depends_on:
+      - api
+      - redis
+      - rabbitmq
+    volumes:
+      - ./agents/international:/app
+
+  # Supervisor Agent (to be built)
+  supervisor-agent:
+    build:
+      context: ./agents/supervisor
+      dockerfile: Dockerfile
+    container_name: pelephone-supervisor-agent
+    networks:
+      - pelephone-network
+    depends_on:
+      - api
+      - redis
+      - rabbitmq
+      - billing-agent
+      - international-agent
+    volumes:
+      - ./agents/supervisor:/app
+
+volumes:
+  postgres_data:
+  redis_data:
+  elasticsearch_data:
+  rabbitmq_data:
+  
+networks:
+  pelephone-network:
+    driver: bridge
